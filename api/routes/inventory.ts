@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { supabase } from '../server.js';
+import { supabase } from '../supabase.ts';
 import { authenticateToken, authorizeRole, checkPermission } from '../middleware/auth.js';
 
 const router = Router();
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
     if (location) query = query.eq('location_id', location);
     if (product) query = query.eq('product_id', product);
     if (low_stock === 'true') {
-      query = query.lt('available_quantity', supabase.raw('products.minimum_stock'));
+  query = query.lt('available_quantity', (supabase as any).raw('products.minimum_stock'));
     }
 
     const { data, error, count } = await query;

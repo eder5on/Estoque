@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { supabase } from '../server.js';
+import { supabase } from '../supabase.ts';
 import { authenticateToken, authorizeRole, checkPermission } from '../middleware/auth.js';
 import { Product, ProductStatus, ProductType } from '../types/index.js';
 import QRCode from 'qrcode';
@@ -551,7 +551,7 @@ router.get('/reports/low-stock', async (req, res) => {
         )
       `)
       .eq('is_active', true)
-      .lt('inventory.available_quantity', supabase.raw('products.minimum_stock'));
+    .lt('inventory.available_quantity', (supabase as any).raw('products.minimum_stock'));
 
     if (location) {
       query = query.eq('inventory.location_id', location);

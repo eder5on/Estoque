@@ -33,7 +33,7 @@ export interface StockMovement {
   to_location_id?: string;
   reference_id?: string;
   notes?: string;
-  created_by: string;
+  created_by?: string;
   created_at: string;
 }
 

@@ -1,6 +1,6 @@
 // Rotas auxiliares - Categorias
 import { Router } from 'express';
-import { supabase } from '../server.js';
+import { supabase } from '../supabase.ts';
 import { authenticateToken } from '../middleware/auth.js';
 
 const router = Router();

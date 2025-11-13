@@ -1,6 +1,6 @@
 // Rotas de relatórios e dashboards
 import { Router } from 'express';
-import { supabase } from '../server.js';
+import { supabase } from '../supabase.ts';
 import { authenticateToken, authorizeRole } from '../middleware/auth.js';
 
 const router = Router();
@@ -27,7 +27,9 @@ router.get('/dashboard', async (req, res) => {
       .select('quantity, product:products(cost_price)');
 
     const totalInventoryValue = inventoryData?.reduce((total, item) => {
-      return total + (item.quantity * (item.product?.cost_price || 0));
+      // Supabase may return related rows as arrays; normalize access safely
+      const cost = (item.product as any)?.cost_price ?? (Array.isArray(item.product) ? item.product[0]?.cost_price : undefined) ?? 0;
+      return total + (item.quantity * cost);
     }, 0) || 0;
 
     // Produtos com estoque baixo
@@ -35,7 +37,7 @@ router.get('/dashboard', async (req, res) => {
       .from('products')
       .select('*, inventory:inventory(quantity)')
       .eq('is_active', true)
-      .lt('inventory.quantity', supabase.raw('products.minimum_stock'));
+    .lt('inventory.quantity', (supabase as any).raw('products.minimum_stock'));
 
     // Vendas do período
     const { data: periodSales } = await supabase

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useProductStore } from '../stores/productStore';
 import { useAuthStore } from '../stores/authStore';
 import { ArrowLeft, Save, QrCode, Upload, Package, DollarSign, Hash, MapPin, User, FileText } from 'lucide-react';
+import type { Product } from '../stores/productStore';
 import { toast } from 'sonner';
 
 const ProductForm: React.FC = () => {
@@ -23,7 +24,7 @@ const ProductForm: React.FC = () => {
     name: '',
     description: '',
     category: '',
-    status: 'novo' as const,
+  status: 'novo',
     serial_number: '',
     cost_price: '',
     sale_price: '',
@@ -84,7 +85,8 @@ const ProductForm: React.FC = () => {
         rental_price: formData.rental_price ? parseFloat(formData.rental_price) : undefined,
         min_stock: formData.min_stock ? parseInt(formData.min_stock) : undefined,
         max_stock: formData.max_stock ? parseInt(formData.max_stock) : undefined,
-      };
+        // ensure status has correct union type
+      } as Omit<Product, 'id' | 'created_at' | 'updated_at'>;
 
       if (id) {
         await updateProduct(id, productData);

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { supabase } from '../server.js';
+import { supabase } from '../supabase.ts';
 import { User, UserRole } from '../types/index.js';
 
 // Estender a interface Request do Express para incluir user

@@ -1,6 +1,6 @@
 // Rotas auxiliares - Fornecedores
 import { Router } from 'express';
-import { supabase } from '../server.js';
+import { supabase } from '../supabase.ts';
 import { authenticateToken, authorizeRole, checkPermission } from '../middleware/auth.js';
 
 const router = Router();
